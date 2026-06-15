@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Railway Station Planning Simulator</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    text-align:center;
+    background:#f4f4f4;
+    padding:30px;
+}
+
+.card{
+    width:700px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0px 2px 10px rgba(0,0,0,.2);
+}
+
+input{
+    width:300px;
+    padding:10px;
+    margin:8px;
+    font-size:16px;
+}
+
+button{
+    padding:10px 20px;
+    background:darkblue;
+    color:white;
+    border:none;
+    margin-top:15px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+#result{
+    margin-top:25px;
+    font-size:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🚆 Railway Station Planning Simulator</h1>
+
+<div class="card">
+
+<h3>Enter Station Details</h3>
+
+<input
+type="text"
+id="station_name"
+placeholder="Station Name"
+
+>
+
+<br>
+
+<input
+type="number"
+id="pcs"
+placeholder="Number of PCs"
+
+>
+
+<br>
+
+<input
+type="number"
+id="switches"
+placeholder="Number of Switches"
+
+>
+
+<br>
+
+<input
+type="number"
+id="routers"
+placeholder="Number of Routers"
+
+>
+
+<br>
+
+<input
+type="text"
+id="ip_range"
+placeholder="IP Range (Example: 192.168.1.0/24)"
+
+>
+
+<br>
+
+<button onclick="generatePlan()">
+    Generate Plan
+</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+function generatePlan(){
+
+    let station =
+        document.getElementById(
+            "station_name"
+        ).value;
+
+    let pcs =
+        parseInt(
+            document.getElementById(
+                "pcs"
+            ).value
+        ) || 0;
+
+    let switches =
+        parseInt(
+            document.getElementById(
+                "switches"
+            ).value
+        ) || 0;
+
+    let routers =
+        parseInt(
+            document.getElementById(
+                "routers"
+            ).value
+        ) || 0;
+
+    let ipRange =
+        document.getElementById(
+            "ip_range"
+        ).value;
+
+    // Bandwidth Calculation
+
+    let bandwidthScore =
+
+        (pcs * 5)
+
+        +
+
+        (switches * 20)
+
+        +
+
+        (routers * 50);
+
+    let bandwidth;
+
+    if(bandwidthScore <= 100){
+
+        bandwidth = "100 Mbps";
+
+    }
+    else if(bandwidthScore <= 500){
+
+        bandwidth = "500 Mbps";
+
+    }
+    else if(bandwidthScore <= 1000){
+
+        bandwidth = "1 Gbps";
+
+    }
+    else{
+
+        bandwidth = "10 Gbps";
+
+    }
+
+    // Station Type
+
+    let stationType;
+
+    if(pcs <= 20){
+
+        stationType = "Small Station";
+
+    }
+    else if(pcs <= 50){
+
+        stationType = "Medium Station";
+
+    }
+    else{
+
+        stationType = "Large Station";
+
+    }
+
+    // Cost Estimation
+
+    let totalCost =
+
+        (pcs * 30000)
+
+        +
+
+        (switches * 5000)
+
+        +
+
+        (routers * 15000);
+
+    let output = `
+
+    <h2>${station}</h2>
+
+    <h3>Network Planning Details</h3>
+
+    Station Type : ${stationType}<br><br>
+
+    PCs : ${pcs}<br><br>
+
+    Switches : ${switches}<br><br>
+
+    Routers : ${routers}<br><br>
+
+    Recommended Bandwidth : ${bandwidth}<br><br>
+
+    IP Range : ${ipRange}<br><br>
+
+    Estimated Cost : ₹ ${totalCost}
+
+    `;
+
+    document.getElementById(
+        "result"
+    ).innerHTML = output;
+}
+</script>
+
+</body>
+
+</html>
+
+
