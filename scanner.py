@@ -1,5 +1,7 @@
 import nmap
 import psutil
+from datetime import datetime
+
 import ipaddress
 import socket
 import subprocess
@@ -13,7 +15,7 @@ from database import (
     update_device_status,
     mark_missing_devices_offline
 )
-
+from google_sheet import update_google_sheet
 # Current Network Track
 current_network = None
 
@@ -246,14 +248,15 @@ def scan_network():
 
         devices.append({
 
-            "ip": host,
-            "status": "Online",
-            "latency": latency,
-            "device_type": device_type,
-            "mac_address": mac_address,
-            "vendor": vendor
+        "ip": host,
+        "status": "Online",
+        "latency": latency,
+        "device_type": device_type,
+        "mac_address": mac_address,
+        "vendor": vendor,
+        "last_seen": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        })
+})
 
         try:
 
@@ -274,11 +277,11 @@ def scan_network():
             )
 
     # Offline Detection
-    mark_missing_devices_offline(
-        found_ips
-    )
+    mark_missing_devices_offline(found_ips)
+
     generate_report(devices)
 
+    update_google_sheet(devices)
     return devices
 
 

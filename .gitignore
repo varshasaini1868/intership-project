@@ -21,3 +21,6 @@ Railway_Network_Documents/
 
 # Logs
 *.log
+# Google Cloud Secret
+*.json
+ai-railway-network-management-c3fa26bcfd8a.json
