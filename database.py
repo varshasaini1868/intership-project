@@ -121,6 +121,18 @@ def get_devices():
     cursor.execute(query)
 
     return cursor.fetchall()
+# Get All Routers
+def get_routers():
+
+    query = """
+    SELECT *
+    FROM routers
+    ORDER BY id
+    """
+
+    cursor.execute(query)
+
+    return cursor.fetchall()
 
 
 # Dashboard Data
@@ -190,12 +202,18 @@ def get_devices_for_dashboard():
 # Testing
 if __name__ == "__main__":
 
-    devices = get_devices()
-
     print("\nDevices Found:\n")
 
-    for device in devices:
+    devices = get_devices()
 
+    for device in devices:
         print(device)
+
+    print("\nRouter List\n")
+
+    routers = get_routers()
+
+    for router in routers:
+        print(router)
 
     conn.close()

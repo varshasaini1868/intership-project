@@ -1,0 +1,21 @@
+RAILWAY NETWORK REPORT
+==================================================
+
+Generated Time : 2026-07-24 15:27:35.448596
+
+Total Devices : 2
+
+IP Address : 10.116.6.178
+MAC Address : Unknown
+Vendor : Unknown Vendor
+Device Type : Network Device
+Status : Online
+Latency : 1 ms
+----------------------------------------
+IP Address : 10.116.6.75
+MAC Address : A2:46:12:48:C3:E6
+Vendor : Unknown Vendor
+Device Type : Network Device
+Status : Online
+Latency : 4 ms
+----------------------------------------

@@ -1,10 +1,13 @@
 import nmap
+import psutil
+import ipaddress
 import socket
 import subprocess
 import re
 
-from mac_vendor_lookup import MacLookup
 
+from mac_vendor_lookup import MacLookup
+from documentation import generate_report
 from database import (
     delete_all_devices,
     update_device_status,
@@ -16,25 +19,45 @@ current_network = None
 
 
 # Auto Detect Network
-def get_network_range():
+def get_network_ranges():
 
-    try:
+    networks = []
 
-        ip = socket.gethostbyname(
-            socket.gethostname()
-        )
+    interfaces = psutil.net_if_addrs()
 
-        parts = ip.split(".")
+    for interface in interfaces.values():
 
-        return (
-            f"{parts[0]}."
-            f"{parts[1]}."
-            f"{parts[2]}.0/24"
-        )
+        for addr in interface:
 
-    except:
+            if addr.family == socket.AF_INET:
 
-        return "127.0.0.1/32"
+                ip = addr.address
+
+                if (
+                    ip.startswith("127.")
+                    or ip.startswith("169.254")
+                ):
+                    continue
+
+                try:
+
+                    parts = ip.split(".")
+
+                    network = (
+                        f"{parts[0]}."
+                        f"{parts[1]}."
+                        f"{parts[2]}.0/24"
+                    )
+
+                    if network not in networks:
+
+                        networks.append(network)
+
+                except:
+
+                    pass
+
+    return networks
 
 
 # Get Latency
@@ -137,10 +160,17 @@ def scan_network():
 
     devices = []
 
-    network = get_network_range()
+    networks = get_network_ranges()
 
-    print(f"\nScanning Network: {network}")
+    for network in networks:
 
+     print(f"\nScanning Network : {network}")
+     scanner = nmap.PortScanner()
+
+    scanner.scan(
+      network,
+    arguments='-sn -T5 --min-parallelism 100'
+)
     # Network Change Detection
     if current_network is None:
 
@@ -162,12 +192,8 @@ def scan_network():
 
         current_network = network
 
-    scanner = nmap.PortScanner()
+    
 
-    scanner.scan(
-    network,
-    arguments='-sn -T5 --min-parallelism 100'
-)
 
     found_ips = []
 
@@ -251,6 +277,7 @@ def scan_network():
     mark_missing_devices_offline(
         found_ips
     )
+    generate_report(devices)
 
     return devices
 
