@@ -5,6 +5,10 @@ from google.oauth2.service_account import Credentials
 
 # Google Sheet ID
 SPREADSHEET_ID = "12S79JcWs7wn8WAanVRap11BmRD21AwobmvkEO-XOqCQ"
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 
 # JSON Key File
 google_credentials = os.getenv("GOOGLE_CREDENTIALS")
