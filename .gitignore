@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environment
+venv/
+.venv/
+
+# VS Code
+.vscode/
+
+# Documentation
+Railway_Network_Documents/
+
+# Database
+*.db
+
+# Environment variables
+.env
+
+# Logs
+*.log
