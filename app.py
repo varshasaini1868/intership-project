@@ -1,17 +1,25 @@
 from flask import Flask, render_template
 from sheet_database import get_devices_for_dashboard
-from scanner import scan_network
+
+
+
 
 import threading
 import time
 import webbrowser
+import os
 
+scan_network = None
+
+if os.getenv("RUN_SCANNER", "true").lower() == "true":
+    from scanner import scan_network
 app = Flask(__name__)
 
 
 # Background Auto Scanner
 def auto_scan():
-
+   if scan_network is None:
+    return
     while True:
 
         print("Scanning Network...")
@@ -22,7 +30,6 @@ def auto_scan():
         except Exception as e:
             print("Scan Error:", e)
 
-        # 30 sec me ek baar scan
         time.sleep(30)
 
 
@@ -51,7 +58,7 @@ def planner():
 # Background Scanner Thread
 import os
 
-if os.environ.get("RENDER") is None:
+if scan_network is not None:
 
     scanner_thread = threading.Thread(
         target=auto_scan,
