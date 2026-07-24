@@ -1,4 +1,7 @@
+import os
+import json
 import gspread
+
 from google.oauth2.service_account import Credentials
 
 # -------------------------
@@ -7,17 +10,23 @@ from google.oauth2.service_account import Credentials
 
 SPREADSHEET_ID = "12S79JcWs7wn8WAanVRap11BmRD21AwobmvkEO-XOqCQ"
 
-SERVICE_ACCOUNT_FILE = "ai-railway-network-management-c3fa26bcfd8a.json"
+google_credentials = os.getenv("GOOGLE_CREDENTIALS")
 
-SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
-]
+if google_credentials:
 
-credentials = Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE,
-    scopes=SCOPES
-)
+    credentials_info = json.loads(google_credentials)
+
+    credentials = Credentials.from_service_account_info(
+        credentials_info,
+        scopes=SCOPES
+    )
+
+else:
+
+    credentials = Credentials.from_service_account_file(
+        "ai-railway-network-management-c3fa26bcfd8a.json",
+        scopes=SCOPES
+    )
 
 client = gspread.authorize(credentials)
 
