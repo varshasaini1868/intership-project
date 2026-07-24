@@ -16,21 +16,15 @@ SCOPES = [
 
 google_credentials = os.getenv("GOOGLE_CREDENTIALS")
 
-if google_credentials:
+if not google_credentials:
+    raise Exception("GOOGLE_CREDENTIALS environment variable NOT FOUND")
 
-    credentials_info = json.loads(google_credentials)
+credentials_info = json.loads(google_credentials)
 
-    credentials = Credentials.from_service_account_info(
-        credentials_info,
-        scopes=SCOPES
-    )
-
-else:
-
-    credentials = Credentials.from_service_account_file(
-        "ai-railway-network-management-c3fa26bcfd8a.json",
-        scopes=SCOPES
-    )
+credentials = Credentials.from_service_account_info(
+    credentials_info,
+    scopes=SCOPES
+)
 
 client = gspread.authorize(credentials)
 
